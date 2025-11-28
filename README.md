@@ -1,240 +1,620 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Salem Investment Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --primary:#1f6feb;
-  --secondary:#0ea5a0;
-  --danger:#ef4444;
-  --bg:#f6f8fb;
-  --card:#fff;
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
-body{background:var(--bg);color:#0f1724;}
-.container{max-width:900px;margin:20px auto;padding:16px;}
-.card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 8px 20px rgba(0,0,0,0.08);margin-bottom:16px;transition:transform 0.2s;}
-.card:hover{transform:translateY(-3px);}
-header{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;background:linear-gradient(90deg,var(--primary),var(--secondary));color:white;}
-header img{width:60px;height:60px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-h1,h2,h3{margin:0 0 8px 0;}
-p.lead{color:white;margin:4px 0;font-size:14px;}
-input,button,select{padding:10px;border-radius:10px;border:1px solid #e6edf3;font-size:14px;}
-button{font-weight:600;cursor:pointer;transition:transform 0.15s;}
-button:hover{transform:scale(1.05);}
-button.gradient{background:linear-gradient(45deg,var(--primary),var(--secondary));color:white;border:none;}
-.muted{color:#64748b;font-size:13px;}
-.space-between{display:flex;justify-content:space-between;align-items:center;}
-.balance{font-weight:700;font-size:22px;}
-.small{font-size:13px;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{padding:10px;border-bottom:1px solid #eef2f7;text-align:left;}
-a{color:var(--primary);text-decoration:none;}
-a:hover{text-decoration:underline;}
-#proofPopup{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;}
-#proofPopup img{max-width:100%;border-radius:10px;margin-bottom:10px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salim Investment - Secure Your Financial Future</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
+        :root {
+            --primary: #1e40af;
+            --secondary: #dc2626;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+        
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --secondary: #ef4444;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --dark: #f8fafc;
+            --light: #1f2937;
+            --gradient: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        }
+        
+        body { 
+            background: var(--gradient);
+            color: var(--dark);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        
+        /* Header Styling */
+        .header {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        }
+        
+        .logo {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .tagline {
+            color: var(--dark);
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        /* Card Styling */
+        .card { 
+            background: var(--light); 
+            border-radius: 20px; 
+            padding: 30px; 
+            margin: 25px 0; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--primary);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Button Styling */
+        .btn { 
+            padding: 14px 28px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary { 
+            background: var(--primary); 
+            color: white; 
+        }
+        
+        .btn-success { 
+            background: var(--success); 
+            color: white; 
+        }
+        
+        .btn-danger { 
+            background: var(--secondary); 
+            color: white; 
+        }
+        
+        .btn-warning { 
+            background: var(--accent); 
+            color: white; 
+        }
+        
+        /* Form Styling */
+        .form-group {
+            margin: 20px 0;
+        }
+        
+        input, select { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Navigation */
+        .nav { 
+            background: var(--light); 
+            padding: 20px 25px; 
+            border-radius: 15px; 
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .user-info {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1em;
+        }
+        
+        /* Balance Display */
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1%, transparent 1%);
+            background-size: 20px 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .balance-amount {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin: 15px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .action-card {
+            background: var(--light);
+            padding: 25px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+        
+        .action-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        /* Investment Plans Grid */
+        .plans-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            margin: 35px 0;
+        }
+        
+        .plan-card { 
+            background: var(--light); 
+            padding: 30px 25px; 
+            border-radius: 20px; 
+            text-align: center;
+            border: 3px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .plan-card:hover { 
+            border-color: var(--primary); 
+            transform: translateY(-10px) scale(1.02); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .plan-amount { 
+            font-size: 2.2em; 
+            font-weight: bold; 
+            color: var(--primary); 
+            margin: 15px 0;
+        }
+        
+        .plan-daily { 
+            font-size: 1.4em; 
+            color: var(--success); 
+            font-weight: bold;
+        }
+        
+        .plan-badge {
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-weight: bold;
+        }
+        
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .payment-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .payment-card.active {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        /* Transaction Table */
+        .transaction-section {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 25px 0; 
+        }
+        
+        th, td { 
+            padding: 18px; 
+            text-align: left; 
+            border-bottom: 1px solid #e2e8f0; 
+        }
+        
+        th { 
+            background: var(--light); 
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1.1em;
+        }
+        
+        tr:hover {
+            background: rgba(30, 64, 175, 0.05);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-links {
+            margin: 25px 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            margin: 0 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        /* Popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .popup-content {
+            background: var(--light);
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: popIn 0.4s ease;
+        }
+        
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Loading Spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .balance-amount {
+                font-size: 2.5em;
+            }
+            
+            .logo {
+                font-size: 2.2em;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="logo">SALIM<span>INVESTMENT</span></div>
+            <div class="tagline">Secure Your Financial Future With Trusted Investments</div>
+        </div>
 
-<!-- Header -->
-<div class="card">
-<header>
-<img src="logo.png" alt="Salem Logo">
-<div>
-<h1>Salem Investment Dashboard</h1>
-<p class="lead">Trusted since 1979 | Spin, VIP, Referral, QR Demo</p>
-</div>
-</header>
-</div>
+        <!-- Authentication Card -->
+        <div class="card" id="authCard" style="display: block;">
+            <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px;">
+                <i class="fas fa-lock"></i> Welcome to Salim Investment
+            </h2>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 10px; font-weight: bold; color: var(--dark);">
+                    <i class="fas fa-mobile-alt"></i> Nepali Mobile Number:
+                </label>
+                <div style="display: flex; align-items: center;">
+                    <span style="background: var(--light); padding: 15px; border-radius: 12px 0 0 12px; border: 2px solid #e2e8f0; font-weight: bold; border-right: none;">
+                        +977
+                    </span>
+                    <input type="tel" id="phone" placeholder="9841234567" maxlength="10" 
+                           style="border-radius: 0 12px 12px 0; margin: 0; border-left: none;">
+                </div>
+                <small style="color: #666;">Enter your 10-digit Nepali number (98/97/96...)</small>
+            </div>
+            
+            <div class="form-group">
+                <label style="display: block; margin-bottom: 10px; font-weight: bold; color: var(--dark);">
+                    <i class="fas fa-key"></i> Password:
+                </label>
+                <input type="password" id="password" placeholder="Create strong password (min 6 characters)">
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn btn-primary" id="signupBtn">
+                    <i class="fas fa-gift"></i> Sign Up - Get 50 NPR Bonus
+                </button>
+                <button class="btn btn-success" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+            
+            <p id="authMsg" style="color: var(--secondary); margin-top: 20px; font-weight: bold; text-align: center;"></p>
+        </div>
 
-<!-- Auth Card -->
-<div class="card" id="authCard">
-<div class="space-between">
-<div>
-<h2>Welcome — Sign up / Log in</h2>
-<p class="muted">Nepali Number (+977) required</p>
-</div>
-<div class="muted small">Salem Investment Counselors</div>
-</div>
+        <!-- Dashboard Card -->
+        <div class="card" id="dashCard">
+            <!-- Navigation -->
+            <div class="nav">
+                <div class="user-info">
+                    <i class="fas fa-user"></i> Welcome, <span id="userEmail"></span>
+                </div>
+                <div>
+                    <button class="btn btn-warning" onclick="showSection('investmentSection')">
+                        <i class="fas fa-briefcase"></i> Investments
+                    </button>
+                    <button class="btn btn-primary" onclick="showSection('transactionSection')">
+                        <i class="fas fa-chart-bar"></i> Transactions
+                    </button>
+                    <button class="btn btn-danger" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div style="font-size: 1.3em; opacity: 0.9;">Your Balance</div>
+                <div class="balance-amount" id="balance">NPR 0</div>
+                <div style="opacity: 0.8;">Available for withdrawal</div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-card" onclick="showSection('depositSection')">
+                    <div class="action-icon"><i class="fas fa-credit-card"></i></div>
+                    <div style="font-weight: bold; font-size: 1.1em;">Deposit</div>
+                    <small>Add funds to your account</small>
+                </div>
+                <div class="action-card" onclick="showSection('withdrawSection')">
+                    <div class="action-icon"><i class="fas fa-university"></i></div>
+                    <div style="font-weight: bold; font-size: 1.1em;">Withdraw</div>
+                    <small>Get your earnings</small>
+                </div>
+                <div class="action-card" onclick="dailyCheckin()">
+                    <div class="action-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div style="font-weight: bold; font-size: 1.1em;">Daily Check-in</div>
+                    <small>+5 NPR Bonus</small>
+                </div>
+                <div class="action-card" onclick="spinWheel()">
+                    <div class="action-icon"><i class="fas fa-dharmachakra"></i></div>
+                    <div style="font-weight: bold; font-size: 1.1em;">Spin Wheel</div>
+                    <small>Win up to 40 NPR</small>
+                </div>
+            </div>
 
-<div style="margin-top:12px">
-<div style="display:flex;gap:8px;flex-wrap:wrap">
-<input id="phone" type="text" placeholder="Nepali Mobile Number (9801234567)" style="flex:1;min-width:160px">
-<input id="password" type="password" placeholder="Password" style="min-width:160px">
-<input id="referral" type="text" placeholder="Referral Phone (optional)" style="min-width:160px">
-<button id="signupBtn" class="gradient">Sign up</button>
-<button id="loginBtn" style="background:var(--secondary)">Log in</button>
-</div>
-<p class="muted small" style="margin-top:8px">Or continue as <a href="#" id="guestBtn">Guest</a></p>
-</div>
-<div id="authMsg" class="muted small" style="margin-top:8px"></div>
-</div>
-
-<!-- Dashboard Card -->
-<div class="card" id="dashCard" style="display:none">
-
-<div class="space-between">
-<div>
-<div class="muted small">Account</div>
-<div class="balance" id="balance">NPR 0</div>
-</div>
-<div style="text-align:right">
-<div id="userEmail" class="small muted">user@example.com</div>
-<button id="logoutBtn" style="margin-top:8px;background:var(--danger)">Log out</button>
-</div>
-</div>
-
-<hr>
-<div class="form-row" style="margin-bottom:8px;flex-wrap:wrap">
-<input id="amount" type="number" placeholder="Amount" min="1" style="flex:1">
-<button id="depositBtn" class="gradient">Deposit</button>
-<button id="withdrawBtn" style="background:var(--danger)">Withdraw</button>
-</div>
-<p class="muted small">Min Deposit/Withdraw: NPR 500 | Withdrawal Fee: 5%</p>
-
-<h3>Deposit using Nepali Wallets (Demo)</h3>
-<div class="form-row" style="gap:8px;">
-<button id="khaltiBtn" style="background:#5c2d91">Deposit with Khalti</button>
-<button id="esewaBtn" style="background:#1ba548">Deposit with eSewa</button>
-<button id="bankBtn" style="background:#0f172a">Deposit via Nepal Bank</button>
-</div>
-
-<h3>Transactions</h3>
-<table id="txTable">
-<thead><tr><th>Type</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
-<tbody></tbody>
-</table>
-</div>
-
-<!-- Admin Panel -->
-<div id="adminLogin" class="card" style="max-width:350px; margin:40px auto; display:none; text-align:center;">
-<h2>Admin Login</h2>
-<input id="adminPass" type="password" placeholder="Enter Admin Password" style="width:100%; margin-bottom:10px; padding:10px; border-radius:10px; border:1px solid #ccc;">
-<button id="adminLoginBtn" style="width:100%; padding:10px; border-radius:10px;">Login</button>
-</div>
-
-<div id="adminPanel" style="display:none; padding:20px; max-width:900px; margin:auto;">
-<h2 style="text-align:center;">Admin Dashboard</h2>
-<div class="card">
-<h3>Withdraw Requests</h3>
-<table id="adminWithdrawTable" style="width:100%; border-collapse:collapse;">
-<tr style="background:#f1f5f9;">
-<th>User</th><th>Amount</th><th>Proof</th><th>Status</th><th>Action</th>
-</tr>
-</table>
-</div>
-<button id="logoutAdmin" style="background:#ef4444; padding:10px 20px; border-radius:12px; color:white;">Logout</button>
-</div>
-
-<!-- Proof Popup -->
-<div id="proofPopup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); justify-content:center; align-items:center;">
-<div style="background:white; padding:20px; border-radius:14px; max-width:90%; max-height:90%; overflow:auto;">
-<img id="popupImg" src="" style="max-width:100%; border-radius:10px; margin-bottom:10px;">
-<button onclick="closePopup()" style="width:100%; padding:10px; border-radius:8px; background:#ef4444; color:white;">Close</button>
-</div>
-</div>
-
-<script>
-// Complete JS logic: Signup/Login, Guest, VIP, Deposit/Withdraw, Admin, QR demo, Transaction table
-const ADMIN_PASSWORD='salem_admin_2025';
-const el=id=>document.getElementById(id);
-let state={user:null,balance:0,tx:[],dailyCheckin:false};
-
-// Show/Hide
-function show(id,val=true){el(id).style.display=val?'block':'none';}
-
-// Proof Popup
-function openPopup(src){el('popupImg').src=src; show('proofPopup');}
-function closePopup(){show('proofPopup',false);}
-
-// Transactions Table
-function renderTxTable(){
-  const tbody=el('txTable').querySelector('tbody');
-  tbody.innerHTML='';
-  state.tx.forEach((t)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${t.type}</td>
-                  <td>NPR ${t.amount}</td>
-                  <td>${t.date}</td>
-                  <td>${t.status}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-// Add transaction
-function addTx(type,amount,meta={}){state.tx.unshift({type,amount,date:new Date().toLocaleString(),meta,status:meta.status||'completed'});renderTxTable();}
-function updateBalance(){el('balance').innerText=`NPR ${state.balance}`;}
-
-// Signup
-el('signupBtn').onclick=()=>{
-  let phone=el('phone').value.trim(); let pass=el('password').value.trim();
-  if(!phone.match(/^\d{9,10}$/)){el('authMsg').innerText='Invalid Nepali Number'; return;}
-  if(pass.length<6){el('authMsg').innerText='Password min 6 chars'; return;}
-  state.user={phone:'+977'+phone,password:pass,invested:false,balance:50};
-  state.balance=50; el('authCard').style.display='none'; el('dashCard').style.display='block';
-  el('userEmail').innerText=state.user.phone; el('authMsg').innerText='';
-  addTx('Sign-up Bonus',50);
-  alert('Signup success! 50 NPR bonus credited.');
-}
-
-// Login
-el('loginBtn').onclick=()=>{
-  let phone=el('phone').value.trim(); let pass=el('password').value.trim();
-  if(!state.user || state.user.phone!=='+977'+phone || state.user.password!==pass){el('authMsg').innerText='Wrong credentials';return;}
-  el('authCard').style.display='none'; el('dashCard').style.display='block'; el('userEmail').innerText=state.user.phone; updateBalance();
-}
-
-// Logout
-el('logoutBtn').onclick=()=>{el('dashCard').style.display='none'; el('authCard').style.display='block'; state.user=null; state.balance=0; state.tx=[]; renderTxTable();}
-
-// Deposit
-el('depositBtn').onclick=()=>{
-  let amt=Number(el('amount').value); if(amt<500){alert('Min deposit 500 NPR'); return;}
-  state.balance+=amt; updateBalance(); addTx('Deposit',amt,{status:'completed'});
-}
-
-// Withdraw
-el('withdrawBtn').onclick=()=>{
-  if(!state.user?.invested){alert('Purchase VIP first'); return;}
-  let amt=Number(el('amount').value); if(amt<500){alert('Min withdraw 500'); return;}
-  if(amt>state.balance){alert('Insufficient balance'); return;}
-  let fee=Math.ceil(amt*0.05); state.balance-=amt; updateBalance();
-  addTx('WithdrawRequest',amt,{status:'pending',fee:fee,user:state.user.phone}); alert('Withdraw request submitted.');
-}
-
-// Admin login
-el('adminLoginBtn').onclick=()=>{
-  if(el('adminPass').value===ADMIN_PASSWORD){show('adminLogin',false); show('adminPanel'); renderAdminTable();}
-  else{alert('Wrong password');}
-}
-el('logoutAdmin').onclick=()=>{show('adminPanel',false); show('adminLogin',true);}
-
-// Admin Withdraw Table
-function renderAdminTable(){
-  const tbl=el('adminWithdrawTable'); tbl.querySelectorAll('tr:not(:first-child)').forEach(r=>r.remove());
-  state.tx.forEach((t,i)=>{
-    if(t.type==='WithdrawRequest'){
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${t.meta.user||'Guest'}</td><td>${t.amount}</td>
-                    <td>${t.meta.proof?'<button onclick="openPopup(\''+t.meta.proof+'\')">View</button>':'-'}</td>
-                    <td>${t.status}</td>
-                    <td><button onclick="approve(${i})">Approve</button> <button onclick="reject(${i})">Reject</button></td>`;
-      tbl.appendChild(tr);
-    }
-  });
-}
-function approve(i){state.tx[i].status='approved'; state.balance-=Number(state.tx[i].amount); renderAdminTable(); renderTxTable();}
-function reject(i){state.tx[i].status='rejected'; renderAdminTable(); renderTxTable();}
-
-// QR Demo
-el('khaltiBtn').onclick=()=>{alert('Khalti QR demo');}
-el('esewaBtn').onclick=()=>{alert('eSewa QR demo');}
-el('bankBtn').onclick=()=>{alert('Bank QR demo');}
-</script>
-</body>
-</html>
+            <!-- Deposit Section -->
+            <div class="card" id="depositSection">
+                <h3 style="color: var(--primary); margin-bottom: 25px;">
+                    <i class="fas fa-credit-card"></i> Deposit Funds
+                </h3>
+                <input type="number" id="amount" placeholder="Enter amount (minimum 500 NPR)" min="500">
+                
+                <div style="margin: 25px 0;">
+                    <h4 style="margin-bottom: 20px; color: var(--dark);">Select Payment Method:</h4>
+                    <div class="payment-methods">
+                        <div class="payment-card active" onclick="selectPayment('khalti')">
+                            <i class="fas fa-wallet" style="font-size: 2em; color: #5C2D91; margin-bottom: 10px;"></i>
+                            <div style="font-weight: bold;">Khalti</div>
+                        </div>
+                        <div class="payment-card" onclick="selectPayment('esewa')">
+                            <i class="fas fa-mobile-alt" style="font-size: 2em; color: #53BEE6; margin-bottom: 10px;"></i>
+                            <div style="font-weight: bold;">eSewa</div>
+                        </div>
+                        <div class="payment-card" onclick="selectPayment('bank')">
+                            <i class="fas fa-university" style="font-size: 2em; color: var(--dark); margin-bottom: 10px;"></i>
+                            <div style="font-weight: bold;">Bank Transfer</div>
+                        </div>
+                    </div>
+ 
